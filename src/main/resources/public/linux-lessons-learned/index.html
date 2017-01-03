@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Linux – Lessons Learned</title>
+    <meta name="keywords" content="linux, linux commands, linux lessons learned">    
+    <meta name="description" content="overview of the Linux Operating System for beginners">    
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">    
+    <link rel="stylesheet" href="css/style.css" media="screen" charset="utf-8">
+    <link rel="stylesheet" href="css/syntax.css" media="screen" charset="utf-8">    
+    <script type="text/javascript">
+    !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
+    analytics.load("tA9zrxd7Eh20dfKQ15h5nt8LolDapYVg");
+    analytics.page()
+    }}();
+    </script>
+  </head>
+  <body>
+    <header>
+      <div id="header-overlay"></div>
+      <span id="logo"></span>
+      <div id="menu">
+        <i class="material-icons">menu</i>
+        <ul id="menu-items">          
+            <li><a href="#fileSecurity">File security</a></li>                                    
+            <li><a href="#linuxTools">Linux Tools</a></li>
+            <li><a href="#todoos">Todoos</a></li>             
+            <li><a href="#links">Links</a></li>          
+            <li><a href="https://github.com/gittieke/tree/master/_examples">Exercises</a></li>
+            <li><a href="https://github.com/gittieke">GitHub</a></li>
+        </ul>          
+      </div>
+      <span id="more">
+        <i class="material-icons">expand_more</i>
+      </span>
+    </header>
+    <section id="content">
+
+    <p>
+      This is the place where I keep my notes when I'm learning about Linux.
+    </p>
+
+      <h1 id="fileSecurity">File security</h1>    
+      <p>On a Linux system, every file is owned by a user and a group user. There is also a third category of users, those that are not the user owner and don't belong to the group owning the file. For each category of users, read, write and execute permissions can be granted or denied.  Use <code>ls -l</code> to show the file permissions
+       </p>
+
+      <h2 id="users">chmod:</h2>
+      <pre><code>chmod u+x,go-rwx <filename></code></pre>
+
+      <h2 id="users">Users and privileges</h2>
+      <p>Not every user has the same privileges.  We have apache, jenkins, ... users.  To run a command as a different user:</p>
+      <pre><code>sudo -u apache -i<user></code></pre>
+
+      <p>Id:</p>
+      <pre><code>id</code></pre>
+      
+      <h1 id="linuxTools">Tools like curl, grep etc</h1>
+      <h2>curl and grep</h2>
+      <p>When starting on this site, I noticed saved html files were not rendered immediately by the Spring Boot embedded webserver.  Apparently, the rootcause only occured in Sublime Text and not in STS).  This got me digging deeper.  I wondered if I could extract some content when using curl.  Command 1 and 2 are returning the same output</p>
+      <pre><code>curl --silent http://localhost:9083/linux-lessons-learned/index.html 2>&1 | grep place</code></pre>
+      <pre><code>curl --silent http://localhost:9083/linux-lessons-learned/index.html | grep place</code></pre>
+      <p><a href="https://spring.io/blog/2014/07/24/spring-framework-4-1-handling-static-web-resources">Spring handling static web resources</a>
+      <a href="http://unix.stackexchange.com/questions/166359/how-to-grep-the-output-of-curl">HowTo grep the output of curl</a></p>
+
+      <h2>loop curl</h2>
+      <p><a href="https://spring.io/guides/gs/actuator-service/">Spring Boot Actuator</a>  adds several production grade services to your application with little effort on your part.  I wrote a lttle shell script to test/measure tese services</p>
+      <pre><code>for ((i=1;i<=100;i++)); 
+ do curl -v --header "Connection: keep-alive" "http://localhost:9083/linux-lessons-learned/index.html"; 
+done</code></pre>
+<p><a href="https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-metrics.html">Spring Boot Metrics</a>
+                    
+      <h1 id="todoos">Todoos</h1>      
+      	<ul>
+      		<li>Find a server which only handles static content: <a href="http://serverfault.com/questions/249512/fastest-web-server-for-serving-static-content">Server static content</a>
+      		<li>Check if you can change config on Spring Boot embedded apache server.  Create a context path lll instead of linux-lessons-learned/</li>
+      		<li>Dynamic to static web server Check if you can change config on Spring Boot embedded apache server.  Create a context path lll instead of linux-lessons-learned/</li>
+      		<li><a href="https://dzone.com/articles/embracing-simplicity-with-static-site-generators">Simple Static site generator</a></li>
+		</ul>      	      	           
+      <h1 id="links">Links</h1>
+      <ul>
+		<li><a href="https://github.com/gittieke/tree/master/_examples">Exercises</a></li>
+        <li><a href="https://github.com/gittieke">GitHub</a></li>
+	  </ul>
+
+    
+<!-- <script src="https://opencollective.com/apex/banner.js"></script> -->
+    </section>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/languages/json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/languages/javascript.min.js"></script>
+    <script src="../js/app.js"></script>
+  </body>
+</html>
+

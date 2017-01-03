@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Apex – Serverless Infrastructure</title>
+    <meta name="keywords" content="apex, serverless, lambda, aws, aws lambda, functions, golang, go">
+    <meta name="description" content="Apex serverless infrastructure built on AWS Lambda">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">    
+    <link rel="stylesheet" href="../css/style.css" media="screen" charset="utf-8">
+    <link rel="stylesheet" href="../css/syntax.css" media="screen" charset="utf-8">    
+    <script type="text/javascript">
+    !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
+    analytics.load("tA9zrxd7Eh20dfKQ15h5nt8LolDapYVg");
+    analytics.page()
+    }}();
+    </script>
+  </head>
+  <body>
+    <header>
+      <div id="header-overlay"></div>
+      <span id="logo"></span>
+      <div id="menu">
+        <i class="material-icons">menu</i>
+        <ul id="menu-items">
+          
+            <li><a href="#installation">Installation</a></li>
+          
+            <li><a href="#aws-credentials">AWS credentials</a></li>
+          
+            <li><a href="#getting-started">Getting started</a></li>
+          
+            <li><a href="#autocomplete">Autocomplete</a></li>
+                                
+            <li><a href="#faq">FAQ</a></li>
+          
+            <li><a href="#links">Links</a></li>
+          
+          <li><a href="https://github.com/apex/apex/tree/master/_examples">Examples</a></li>
+          <li><a href="https://github.com/apex/apex">GitHub</a></li>          
+        </ul>
+      </div>
+      <span id="more">
+        <i class="material-icons">expand_more</i>
+      </span>
+    </header>
+    <section id="content">
+
+    <p>
+      Apex lets you build, deploy, and manage AWS Lambda functions with ease. With Apex you can use
+      languages that are not natively supported by AWS Lambda, such as Golang, through the use
+      of a Node.js shim injected into the build. A variety of workflow related tooling is provided for
+      testing functions, rolling back deploys, viewing metrics, tailing
+      logs, hooking into the build system and more.
+    </p>
+    
+      <h1 id="installation">Installation</h1>
+      <p>On macOS, Linux, or OpenBSD run the following:</p>
+
+<pre><code>curl https://raw.githubusercontent.com/apex/apex/master/install.sh | sh
+</code></pre>
+
+<p>Note that you may need to run the <code>sudo</code> version below, or alternatively chown <code>/usr/local</code>:</p>
+
+<pre><code>curl https://raw.githubusercontent.com/apex/apex/master/install.sh | sudo sh
+</code></pre>
+
+<p>On Windows download <a href="https://github.com/apex/apex/releases">binary</a>.</p>
+
+<p>If already installed, upgrade with:</p>
+
+<pre><code>apex upgrade
+</code></pre>
+
+    
+      <h1 id="aws-credentials">AWS credentials</h1>
+      <p>Before using Apex you need to first give it your account credentials so that Apex can manage resources. There are a number of ways to do that, which are outlined here.</p>
+
+<h2 id="via-environment-variables">Via environment variables</h2>
+
+<p>Using environment variables only, you must specify the following:</p>
+
+<ul>
+<li><code>AWS_ACCESS_KEY_ID</code> AWS account access key</li>
+<li><code>AWS_SECRET_ACCESS_KEY</code> AWS account secret key</li>
+<li><code>AWS_REGION</code> AWS region</li>
+</ul>
+
+<p>If you have multiple AWS projects you may want to consider using a tool such as <a href="http://direnv.net/">direnv</a> to localize and automatically set the variables when
+you&rsquo;re working on a project.</p>
+
+<h2 id="via-aws-files">Via ~/.aws files</h2>
+
+<p>Using the ~/.aws/credentials and ~/.aws/config files you may specify <code>AWS_PROFILE</code> to tell apex which one to reference. However, if you do not have a ~/.aws/config file, or &ldquo;region&rdquo; is not defined, you should set it with the <code>AWS_REGION</code> environment variable. To read more on configuring these files view <a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html">Configuring the AWS CLI</a>.</p>
+
+<p>Here&rsquo;s an example of ~/.aws/credentials:</p>
+
+<pre><code>[example]
+aws_access_key_id = xxxxxxxx
+aws_secret_access_key = xxxxxxxxxxxxxxxxxxxxxxxx
+</code></pre>
+
+<p>Here&rsquo;s an example of ~/.aws/config:</p>
+
+<pre><code>[profile example]
+output = json
+region = us-west-2
+</code></pre>
+
+<h2 id="via-profile-flag">Via profile flag</h2>
+
+<p>If you have both ~/.aws/credentials and ~/.aws/config you may specify the profile directly with <code>apex --profile &lt;name&gt;</code> when issuing commands. This means you do not have to specify any environment variables, however you must provide it with each operation:</p>
+
+<pre><code>$ apex --profile myapp-prod deploy
+</code></pre>
+
+<h2 id="via-project-configuration">Via project configuration</h2>
+
+<p>You may store the profile name in the project.json file itself as shown in the following snippet. This is ideal since it ensures that you do not accidentally have a different environment set.</p>
+
+<pre><code class="language-json">{
+  &quot;profile&quot;: &quot;myapp-prod&quot;
+}
+</code></pre>
+
+<h2 id="precedence">Precedence</h2>
+
+<p>Precedence for loading the AWS credentials is:</p>
+
+<ul>
+<li>profile from flag</li>
+<li>profile from JSON config</li>
+<li>profile from env variables</li>
+<li>profile named &ldquo;default&rdquo;</li>
+</ul>
+
+<h2 id="minimum-iam-policy">Minimum IAM Policy</h2>
+
+<p>Below is a policy for AWS <a href="http://aws.amazon.com/iam/">Identity and Access Management</a> which provides the minimum privileges needed to use Apex to manage your Lambda functions.</p>
+
+<pre><code class="language-json">{
+  &quot;Version&quot;: &quot;2012-10-17&quot;,
+  &quot;Statement&quot;: [
+    {
+      &quot;Action&quot;: [
+        &quot;iam:CreateRole&quot;,
+        &quot;iam:CreatePolicy&quot;,
+        &quot;iam:AttachRolePolicy&quot;,
+        &quot;iam:PassRole&quot;,
+        &quot;lambda:GetFunction&quot;,
+        &quot;lambda:CreateFunction&quot;,
+        &quot;lambda:DeleteFunction&quot;,
+        &quot;lambda:InvokeFunction&quot;,
+        &quot;lambda:GetFunctionConfiguration&quot;,
+        &quot;lambda:UpdateFunctionConfiguration&quot;,
+        &quot;lambda:UpdateFunctionCode&quot;,
+        &quot;lambda:CreateAlias&quot;,
+        &quot;lambda:UpdateAlias&quot;,
+        &quot;lambda:GetAlias&quot;,
+        &quot;lambda:ListVersionsByFunction&quot;,
+        &quot;logs:FilterLogEvents&quot;,
+        &quot;cloudwatch:GetMetricStatistics&quot;
+      ],
+      &quot;Effect&quot;: &quot;Allow&quot;,
+      &quot;Resource&quot;: &quot;*&quot;
+    }
+  ]
+}
+</code></pre>
+
+<h3 id="additional-minimum-iam-policy-to-set-vpc-for-lambda">Additional minimum IAM Policy to set VPC for Lambda</h3>
+
+<p>The following additional policies are needed to set VPC for your Lambda functions.</p>
+
+<pre><code class="language-json">{
+  &quot;Version&quot;: &quot;2012-10-17&quot;,
+  &quot;Statement&quot;: [
+    {
+      &quot;Action&quot;: [
+        &quot;ec2:DescribeSecurityGroups&quot;,
+        &quot;ec2:DescribeSubnets&quot;,
+        &quot;ec2:DescribeVpcs&quot;
+      ],
+      &quot;Effect&quot;: &quot;Allow&quot;,
+      &quot;Resource&quot;: &quot;*&quot;
+    }
+  ]
+}
+</code></pre>
+
+<p>Also, the role which apex made during <code>apex init</code> should have the <code>AWSLambdaVPCAccessExecutionRole</code> policy, see details in <a href="http://docs.aws.amazon.com/lambda/latest/dg/vpc.html">an AWS document</a>.</p>
+
+    
+      <h1 id="getting-started">Getting started</h1>
+      <p>Apex can help initialize a basic project to get you started. First specify your AWS credentials as mentioned in the previous section, then run <code>apex init</code>:</p>
+
+<pre><code>$ export AWS_PROFILE=sloths-stage
+$ apex init
+</code></pre>
+
+<p>You&rsquo;ll be presented with a few prompts, the project&rsquo;s default Lambda IAM role &amp; policy will be created, then you&rsquo;re ready to go!</p>
+
+<pre><code>             _    ____  _______  __
+            / \  |  _ \| ____\ \/ /
+           / _ \ | |_) |  _|  \  /
+          / ___ \|  __/| |___ /  \
+         /_/   \_\_|   |_____/_/\_\
+
+
+
+  Enter the name of your project. It should be machine-friendly, as this
+  is used to prefix your functions in Lambda.
+
+    Project name: sloths
+
+  Enter an optional description of your project.
+
+    Project description: My slothy project
+
+  [+] creating IAM sloth_lambda_function role
+  [+] creating IAM sloth_lambda_logs policy
+  [+] attaching policy to lambda_function role.
+  [+] creating ./project.json
+  [+] creating ./functions
+
+  Setup complete, deploy those functions!
+
+    $ apex deploy
+
+</code></pre>
+
+<p>Now try invoking the sample function:</p>
+
+<pre><code>$ apex invoke hello
+{&quot;hello&quot;:&quot;world&quot;}
+</code></pre>
+
+    
+      <h1 id="autocomplete">Autocomplete</h1>
+      <p>Apex supports command and function name autocompletion. To enable this functionality you&rsquo;ll need to add the following shell script to your profile or similar:</p>
+
+<pre><code class="language-sh">_apex()  {
+  COMPREPLY=()
+  local cur=&quot;${COMP_WORDS[COMP_CWORD]}&quot;
+  local opts=&quot;$(apex autocomplete -- ${COMP_WORDS[@]:1})&quot;
+  COMPREPLY=( $(compgen -W &quot;${opts}&quot; -- ${cur}) )
+  return 0
+}
+
+complete -F _apex apex
+</code></pre>        
+      <h1 id="links">Links</h1>
+      <ul>
+<li><a href="https://github.com/apex/apex">GitHub</a> repository</li>
+<li><a href="https://medium.com/apex-serverless">Medium</a> blog</li>
+<li><a href="https://github.com/apex/apex/tree/master/_examples">Project examples</a> with source</li>
+<li><a href="https://github.com/apex/go-apex">Go</a> runtime package</li>
+<li><a href="https://github.com/apex/node-apex">Node</a> runtime package</li>
+<li><a href="https://apex-dev.azurewebsites.net/"><img src="https://apex-dev.azurewebsites.net/badge.svg" alt="Slack Status" /></a></li>
+</ul>
+
+    
+<!-- <script src="https://opencollective.com/apex/banner.js"></script> -->
+    </section>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/languages/json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/languages/javascript.min.js"></script>
+    <script src="../js/app.js"></script>
+  </body>
+</html>
+
