@@ -1,4 +1,4 @@
-/target/
-.classpath
-.settings/org.eclipse.jdt.core.prefs
+configprops.txt
+tomcat/
 .settings/org.eclipse.core.resources.prefs
+target/
