@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8">
     <title>Linux – Lessons Learned</title>
-    <meta name="keywords" content="linux, linux commands, linux lessons learned">    
-    <meta name="description" content="overview of the Linux Operating System for beginners">    
+    <meta name="keywords" content="linux, linux commands, linux lessons learned">
+    <meta name="description" content="overview of the Linux Operating System for beginners">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">    
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css" media="screen" charset="utf-8">
-    <link rel="stylesheet" href="css/syntax.css" media="screen" charset="utf-8">    
+    <link rel="stylesheet" href="css/syntax.css" media="screen" charset="utf-8">
     <script type="text/javascript">
     !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
     analytics.load("tA9zrxd7Eh20dfKQ15h5nt8LolDapYVg");
@@ -22,36 +22,42 @@
       <span id="logo"></span>
       <div id="menu">
         <i class="material-icons">menu</i>
-        <ul id="menu-items">          
-            <li><a href="#adminRights">HowTo install without admin rights on Windows</a></li>                                                                   
-        </ul>          
-      </div>      
+        <ul id="menu-items">
+            <li><a href="#adminRights">HowTo install without admin rights on Windows</a></li>
+            <li><a href="#jenkins">Jenkins</a></li>
+        </ul>
+      </div>
     </header>
-    
+
     <section id="content">
     <p>
       This is the place where I keep notes on misc learned while working on ICT projects.  This goes over installing on windows without admin rights to....
     </p>
 
       <h1 id="adminRights">Admin Rights</h1>
-      <h2>msiexec silence</h2>    
+      <h2>msiexec silence</h2>
       <p>
       Sometimes you want to bypass have the correct rights.  App in 2016 this still works on Windows 10.  When trying to install nodejs and python via downloading the msi and clicking on this msi, I was interrupted from installing.
       Just run via the CLI in silent mode to bypass this. <code>C:\development\apps>msiexec /a python-x.x.x.msi /qb TARGETDIR=C:\development\apps\python</code>
-      
-      <a href="http://spointeau.blogspot.be/2013/09/python-install-without-admin-rights.html">Thanks Sylvian</a>      
+
+      <a href="http://spointeau.blogspot.be/2013/09/python-install-without-admin-rights.html">Thanks Sylvian</a>
       </p>
-      
+
       <h2>msiexec error 2203</h2>
-      <p>      
+      <p>
       I'm trying to create the administrative installation point, but I keep getting the following error, no matter what I try..
       "Error 2203 Database: c:\Program Files\OurCo\OurProd\Client\Install\clientinstaller.msi
       TARGETDIR should not be pointing to the folder where the main msi is located. Select some other location where the installer has write permission to extract files/folder along with msi
-      
+
       <a href="http://www.itninja.com/question/error-2203-during-administrative-install-msiexec-a">Thanks ItNinja</a>
-      </p>                             
+      </p>
+      <h1 id="jenkins">Jenkins</h1>
+      <h2>stop/start Jenkins</h2>
+      <p>
+        Running Jenkins on a dev machine is sometimes heavy: <a href="https://support.cloudbees.com/hc/en-us/articles/216118748-How-to-Start-Stop-or-Restart-your-Instance">Stop, Start Jenkins</a>
+      </p>
     </section>
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/languages/go.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/languages/json.min.js"></script>
@@ -59,4 +65,3 @@
     <script src="../js/app.js"></script>
   </body>
 </html>
-
